@@ -1,6 +1,8 @@
 package com.server.order.controller;
 
+import com.server.order.controller.dto.ResponseBody;
 import com.server.order.service.dto.OrderDto;
+import com.server.order.service.dto.OrderForPayDto;
 import com.server.order.service.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +24,9 @@ public class OrderController {
      * 결제에 필요한 정보를 서버에 반환
      */
     @PostMapping("")
-    public ResponseEntity orderRequest(@RequestBody OrderDto dto) {
+    public ResponseEntity<ResponseBody<OrderForPayDto>> orderRequest(@RequestBody OrderDto dto) {
         log.info("dto = {}, {}, {}", dto.getMemberId(), dto.getProductId(), dto.getAmount());
         orderService.orderWithPayStatusFalse(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(new ResponseBody<>(orderService.orderWithPayStatusFalse(dto)));
     }
 }

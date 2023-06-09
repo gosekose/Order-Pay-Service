@@ -3,12 +3,12 @@ package com.server.order.controller;
 import com.server.order.controller.dto.ResponseBody;
 import com.server.order.service.dto.ProductDto;
 import com.server.order.service.service.ProductService;
+import com.server.order.service.service.dto.ProductViewDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +20,15 @@ public class ProductController {
     @PostMapping("/save")
     public ResponseEntity<ResponseBody> saveStock(@RequestBody ProductDto dto) {
         return ResponseEntity.ok().body(new ResponseBody<>(productService.save(dto)));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<ResponseBody> getProduct(Pageable pageable) {
+        return ResponseEntity.ok().body(new ResponseBody(productService.getProduct(pageable)));
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ResponseBody<ProductViewDto>> getProductDetail(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok().body(new ResponseBody<>(productService.getProductDetail(productId)));
     }
 }
